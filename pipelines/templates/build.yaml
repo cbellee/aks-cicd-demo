@@ -21,36 +21,24 @@ stages:
         - checkout: self
           clean: true
           persistCredentials: true
-        - task: RunARMTTKTestsXPlat@1
-          displayName: 'Test Parent Templates'
+        - task: AzurePowerShell@5
+          displayName: 'Lint Bicep files'
           inputs:
-            templatelocation: '$(System.DefaultWorkingDirectory)/iac'
-            resultLocation: '$(System.DefaultWorkingDirectory)/results'
-            ignoreExitCode: true
-            recurse: false
-            allTemplatesMain: true
-            mainTemplates: 'infra-main.json, aks-main.json, workload-main.json'
-            cliOutputResults: true
-            usePSCore: true
-            azureServiceConnection: $(azureServiceConnection)
-        - task: RunARMTTKTestsXPlat@1
-          displayName: 'Test Modules'
-          inputs:
-            templatelocation: '$(System.DefaultWorkingDirectory)/iac/modules'
-            resultLocation: '$(System.DefaultWorkingDirectory)/results'
-            recurse: false
-            ignoreExitCode: true
-            allTemplatesMain: false
-            cliOutputResults: true
-            usePSCore: true
-            azureServiceConnection: $(azureServiceConnection)
-        - task: PublishTestResults@2
-          displayName: 'Publish Templates Test Results'
-          inputs:
-            testResultsFormat: NUnit
-            testResultsFiles: '**/*.xml'
-            searchFolder: '$(System.DefaultWorkingDirectory)/results'
-          condition: always()
+            azureSubscription: $(azureServiceConnection)
+            ScriptType: InlineScript
+            azurePowerShellVersion: LatestVersion
+            pwsh: true
+            FailOnStandardError: true
+            Inline: |
+              Get-ChildItem -Path ./iac -Filter *.bicep | Foreach-Object {
+                Write-Host "Building Bicep main file $($_.FullName)"
+                az bicep build --file $_.FullName
+              }
+
+              Get-ChildItem -Path ./iac/modules -Filter *.bicep | Foreach-Object {
+                Write-Host "Building Bicep module file $($_.FullName)"
+                az bicep build --file $_.FullName
+              }
         - task: CopyFiles@2
           displayName: 'Copy Templates to Artifact Staging Directory'
           inputs:
