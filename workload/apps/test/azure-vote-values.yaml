@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: azure-vote
+  namespace: cluster-config
+spec:
+  chart:
+    spec:
+      version: "0.1.1"
+  values:
+    title: 'Test - Azure Voting App'
+    value1: Llama
+    value2: Yak
+    serviceName: test-azure-vote-svc
+    serviceType: ClusterIP

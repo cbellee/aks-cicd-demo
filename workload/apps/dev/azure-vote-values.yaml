@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: azure-vote
+  namespace: cluster-config
+spec:
+  chart:
+    spec:
+      version: "0.1.1"
+  values:
+    title: 'Development - Azure Voting App'
+    value1: Bird
+    value2: Fish
+    serviceName: dev-azure-vote-svc
+    serviceType: ClusterIP

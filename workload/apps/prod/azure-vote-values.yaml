@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: azure-vote
+  namespace: cluster-config
+spec:
+  chart:
+    spec:
+      version: "0.1.1"
+  values:
+    title: 'Production - Azure Voting App'
+    value1: Gerbil
+    value2: Hamster
+    serviceName: prod-azure-vote-svc
+    serviceType: LoadBalancer

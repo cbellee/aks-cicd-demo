@@ -1,0 +1,24 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: azure-vote
+  namespace: cluster-config
+spec:
+  targetNamespace: azure-vote
+  releaseName: azure-vote
+  chart:
+    spec:
+      chart: azure-vote
+      sourceRef:
+        kind: HelmRepository
+        name: azure-samples
+        namespace: cluster-config
+  interval: 5m
+  install:
+    remediation:
+      retries: 3
+  values:
+    title: 'Azure Voting App'
+    value1: Cat
+    value2: Dog
+    serviceType: ClusterIP

@@ -1,0 +1,47 @@
+# workload-pipeline.yaml
+
+resources:
+  repositories:
+  - repository: aks-cicd-demo-repo
+    type: github
+    endpoint: github.com_cbellee
+    name: cbellee/aks-cicd-demo
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - iac/*
+pool:
+  vmImage: 'windows-latest'
+  poolName: 'Azure Pipelines'
+
+variables:
+  - name: location
+    value: 'australiaeast'
+  - name: azureServiceConnection
+    value: 'azure_subscription_b2375b5f-8dab-4436-b87c-32bc7fdce5d0'
+  - name: subscriptionId
+    value: 'b2375b5f-8dab-4436-b87c-32bc7fdce5d0'
+  - name: vmImage
+    value: 'ubuntu-latest'
+  - name: poolName
+    value: 'Azure Pipelines'
+  - name: gitRepoUrl
+    value: 'https://github.com/cbellee/aks-cicd-demo'
+
+stages:
+  - template: ./templates/workload-build.yaml
+    parameters:
+      vmImage: $(vmImage)
+      poolName: $(poolName)
+  - template: ./templates/workload-release.yaml
+    parameters:
+      vmImage: $(vmImage)
+      poolName: $(poolName)
+      location: $(location)
+      azureServiceConnection: $(azureServiceConnection)
+      subscriptionId: $(subscriptionId)
+      gitRepoUrl: $(gitRepoUrl)
+

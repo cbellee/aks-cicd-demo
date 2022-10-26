@@ -1,0 +1,62 @@
+# build.yaml
+
+parameters:
+  - name: vmImage
+    default: 'ubuntu-latest'
+    type: string
+  - name: poolName
+    default: 'Azure Pipelines'
+    type: string
+  - name: azureServiceConnection
+    type: string
+
+stages:
+  - stage: Build
+    jobs:
+    - job: Build
+      pool: 
+        name: ${{parameters.poolName}}
+        vmImage: ${{parameters.vmImage}}
+      steps:
+        - checkout: self
+          clean: true
+          persistCredentials: true
+        - task: RunARMTTKTestsXPlat@1
+          displayName: 'Test Parent Templates'
+          inputs:
+            templatelocation: '$(System.DefaultWorkingDirectory)/iac'
+            resultLocation: '$(System.DefaultWorkingDirectory)/results'
+            ignoreExitCode: true
+            recurse: false
+            allTemplatesMain: true
+            mainTemplates: 'infra-main.json, aks-main.json, workload-main.json'
+            cliOutputResults: true
+            usePSCore: true
+            azureServiceConnection: $(azureServiceConnection)
+        - task: RunARMTTKTestsXPlat@1
+          displayName: 'Test Modules'
+          inputs:
+            templatelocation: '$(System.DefaultWorkingDirectory)/iac/modules'
+            resultLocation: '$(System.DefaultWorkingDirectory)/results'
+            recurse: false
+            ignoreExitCode: true
+            allTemplatesMain: false
+            cliOutputResults: true
+            usePSCore: true
+            azureServiceConnection: $(azureServiceConnection)
+        - task: PublishTestResults@2
+          displayName: 'Publish Templates Test Results'
+          inputs:
+            testResultsFormat: NUnit
+            testResultsFiles: '**/*.xml'
+            searchFolder: '$(System.DefaultWorkingDirectory)/results'
+          condition: always()
+        - task: CopyFiles@2
+          displayName: 'Copy Templates to Artifact Staging Directory'
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)/iac'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          condition: succeededOrFailed()
+        - task: PublishBuildArtifacts@1
+          displayName: 'Publish Artifact: drop'
+          condition: succeededOrFailed()

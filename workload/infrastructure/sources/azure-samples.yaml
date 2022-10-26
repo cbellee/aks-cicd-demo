@@ -1,0 +1,7 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: azure-samples
+spec:
+  interval: 30m
+  url: https://azure-samples.github.io/helm-charts

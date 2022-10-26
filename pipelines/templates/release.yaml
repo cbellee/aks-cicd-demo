@@ -1,0 +1,141 @@
+# release.yaml
+
+parameters:
+  - name: vmImage
+    default: 'ubuntu-latest'
+    type: string
+  - name: 'poolName'
+    default: 'Azure Pipelines'
+    type: string
+  - name: 'location'
+    default: 'australiaeast'
+    type: string
+  - name: azureServiceConnection
+    type: string
+  - name: subscriptionId
+    type: string
+
+stages:
+- stage: dev
+  condition: succeededOrFailed()
+  jobs:
+  - deployment: 
+    displayName: 'Dev Infrastructure Deployment'
+    pool:
+      name: ${{parameters.poolName}}
+    environment: aks-cicd-demo-dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                targetPath: $(System.ArtifactsDirectory)
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Validate Infrastructure Templates'
+              inputs:
+                deploymentScope: Subscription
+                azureResourceManagerConnection: ${{parameters.azureServiceConnection}}
+                subscriptionId: ${{parameters.subscriptionId}}
+                location: ${{parameters.location}}
+                csmFile: '$(System.ArtifactsDirectory)/infra-main.bicep'
+                csmParametersFile: '$(System.ArtifactsDirectory)/parameters/dev/infra.parameters.json'
+                overrideParameters: '-location $(location)'
+                deploymentMode: Validation
+                deploymentName: 'aks-cicd-demo-infra-validation-dev'
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Deploy Infrastructure Templates'
+              inputs:
+                deploymentScope: Subscription
+                azureResourceManagerConnection: ${{parameters.azureServiceConnection}}
+                subscriptionId: ${{parameters.subscriptionId}}
+                location: ${{parameters.location}}
+                csmFile: '$(System.ArtifactsDirectory)/infra-main.bicep'
+                csmParametersFile: '$(System.ArtifactsDirectory)/parameters/dev/infra.parameters.json'
+                overrideParameters: '-location $(location)'
+                deploymentMode: Incremental
+                deploymentName: 'aks-cicd-demo-infra-deployment-dev'
+- stage: test
+  condition: succeededOrFailed()
+  jobs:
+  - deployment: 
+    displayName: 'Test Infrastructure Deployment'
+    pool:
+      name: ${{parameters.poolName}}
+    environment: aks-cicd-demo-test
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                targetPath: $(System.ArtifactsDirectory)
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Validate Infrastructure Templates'
+              inputs:
+                azureResourceManagerConnection: ${{parameters.azureServiceConnection}}
+                deploymentScope: Subscription
+                subscriptionId: ${{parameters.subscriptionId}}
+                location: ${{parameters.location}}
+                csmFile: '$(System.ArtifactsDirectory)/infra-main.bicep'
+                csmParametersFile: $(System.ArtifactsDirectory)/parameters/test/infra.parameters.json
+                overrideParameters: '-location $(location)'
+                deploymentMode: Validation
+                deploymentName: 'aks-cicd-demo-infra-validation-test'
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Deploy Infrastructure Templates'
+              inputs:
+                azureResourceManagerConnection: ${{parameters.azureServiceConnection}}
+                deploymentScope: Subscription
+                subscriptionId: ${{parameters.subscriptionId}}
+                location: ${{parameters.location}}
+                csmFile: '$(System.ArtifactsDirectory)/infra-main.bicep'
+                csmParametersFile: $(System.ArtifactsDirectory)/parameters/test/infra.parameters.json
+                overrideParameters: '-location $(location)'
+                deploymentMode: Incremental
+                deploymentName: 'aks-cicd-demo-infra-deployment-test'
+- stage: prod
+  condition: succeededOrFailed()
+  jobs:
+  - deployment: 
+    displayName: 'Prod Infrastructure Deployment'
+    pool:
+      name: ${{parameters.poolName}}
+    environment: aks-cicd-demo-prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                buildType: 'current'
+                artifactName: 'drop'
+                targetPath: $(System.ArtifactsDirectory)
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Validate Infrastructure Templates'
+              inputs:
+                azureResourceManagerConnection: ${{parameters.azureServiceConnection}}
+                deploymentScope: Subscription
+                subscriptionId: ${{parameters.subscriptionId}}
+                location: ${{parameters.location}}
+                csmFile: '$(System.ArtifactsDirectory)/infra-main.bicep'
+                csmParametersFile: $(System.ArtifactsDirectory)/parameters/prod/infra.parameters.json
+                overrideParameters: '-location $(location)'
+                deploymentMode: Validation
+                deploymentName: 'aks-cicd-demo-infra-validation-prod'
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Deploy Infrastructure Templates'
+              inputs:
+                azureResourceManagerConnection: ${{parameters.azureServiceConnection}}
+                deploymentScope: Subscription
+                subscriptionId: ${{parameters.subscriptionId}}
+                location: ${{parameters.location}}
+                csmFile: '$(System.ArtifactsDirectory)/infra-main.bicep'
+                csmParametersFile: $(System.ArtifactsDirectory)/parameters/prod/infra.parameters.json
+                overrideParameters: '-location $(location)'
+                deploymentMode: Incremental
+                deploymentName: 'aks-cicd-demo-infra-deployment-prod'
