@@ -32,12 +32,12 @@ stages:
             Inline: |
               Get-ChildItem -Path ./iac -Filter *.bicep | Foreach-Object {
                 Write-Host "Building Bicep main file $($_.FullName)"
-                az bicep build --file $_.FullName
+                az bicep build --file $_.FullName --only-show-errors
               }
 
               Get-ChildItem -Path ./iac/modules -Filter *.bicep | Foreach-Object {
                 Write-Host "Building Bicep module file $($_.FullName)"
-                az bicep build --file $_.FullName
+                az bicep build --file $_.FullName --only-show-errors
               }
         - task: CopyFiles@2
           displayName: 'Copy Templates to Artifact Staging Directory'
