@@ -16,7 +16,6 @@ Three ADO pipelines each deploy a separate layer of the solution:
 - Azure DevOps Organization
 - [Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks) this repository into your own GitHub account
 - Create an Azure DevOps [GitHub Service Connection](https://learn.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) to the forked repository
-- Install the 'Run ARM TTK Tests (Cross Platform)' extension to your ADO project from the [Azure DevOps marketplace](https://marketplace.visualstudio.com)
 - Create 3 pipelines from the ./pipelines/*-pipeline.yaml files, in the Azure Devops portal
   - 'Project' -> 'Pipelines' -> 'New Pipeline' -> 'GitHub' -> '(your forked GitHub repo name)/aks-cicd-demo' -> 'Existing Azure Pipelines YAML file'
   - Repeat the above process to browse for each of the existing pipeline files
@@ -32,5 +31,21 @@ Three ADO pipelines each deploy a separate layer of the solution:
   - aks-cicd-demo-test
   - aks-cicd-demo-prod
 
+<img src="./images/environments_screenshot.png" alt="Pipelines" width="800"/>
+
 ## Deployment
-- run the ''
+- Run the the pipelines in the following oder:
+  - infra-pipeline
+  - aks-pipeline
+  - workload-pipeline
+
+## Testing
+- The production environment will be exposed via an Azure Load Balancer
+  - Get the production cluster's kubeconfig file
+    - az aks get-credentials -n 'cluster name' -g prod-aks-rg --admin
+  - Using the bash shell, get the public IP assigned to the 'azure-vote-front' service in the 'azure-vote' namespace 
+    - EXTERNAL_IP=$(kubectl get svc azure-vote-front -n azure-vote --output jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  - Hit the endpoint using curl, or use a browser
+    - curl http://$EXTERNAL_IP
+
+<img src="./images/prod_azure_vote_screenshot.png" alt="Pipelines" width="800"/>
