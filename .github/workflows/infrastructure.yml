@@ -1,4 +1,4 @@
-name: 'Infrastructure Workflow'
+name: 'Infrastructure Deployment'
 on:
   push:
     branches: [ main ]

@@ -20,5 +20,4 @@ module fluxExtension './modules/flux-extension.bicep' = {
   }
 }
 
-output resourceGroupName string = resourceGroupName
 output clusterName string = existingCluster.name

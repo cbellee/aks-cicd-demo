@@ -121,3 +121,4 @@ resource aksNetworkContributorRoleAssignment 'Microsoft.Authorization/roleAssign
 
 output acrName string = acr.outputs.registryName
 output aksClusterName string = aks.outputs.aksClusterName
+output workloadResourceGroupName string = workloadResourceGroupName

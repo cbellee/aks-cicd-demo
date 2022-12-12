@@ -1,0 +1,141 @@
+name: 'Workload Deployment'
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+  # set dependency on infra workflow
+  workflow_run:
+    workflows: ["Infrastructure Deployment"]
+    type:
+      - complete
+permissions:
+      id-token: write
+      contents: read
+env:
+  location: 'australiaeast'
+  subscriptionId: 'b2375b5f-8dab-4436-b87c-32bc7fdce5d0'
+jobs:
+  lint-deployment-files:
+    name: 'Lint Bicep deployment files'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Lint Bicep Files'
+        run: |
+          bicep build ./iac/modules/flux-extension.bicep
+  get-deployment:
+    name: 'Get Deployment Output'
+    runs-on: ubuntu-latest
+    outputs:
+      devResourceGroupName: ${{ steps.get-deployment-output.devResourceGroupName }}
+      testResourceGroupName: ${{ steps.get-deployment-output.testResourceGroupName }}
+      prodResourceGroupName: ${{ steps.get-deployment-output.prodResourceGroupName }}
+      devClusterName: ${{ steps.get-deployment-output.devClusterName }}
+      testClusterName: ${{ steps.get-deployment-output.testClusterName }}
+      prodClusterName: ${{ steps.get-deployment-output.prodClusterName }}
+    steps:
+      - name: 'Get Deployment Output'
+        id: get-deployment-output
+        run: |
+          "devResourceGroupName=$(az deployment subscription show \
+            --name dev-infra-deployment \
+            --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
+
+          "testResourceGroupName=$(az deployment subscription show \
+            --name test-infra-deployment \
+            --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
+
+          "prodResourceGroupName=$(az deployment subscription show \
+            --name prod-infra-deployment \
+            --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
+
+          "devClusterName=$(az deployment subscription show \
+            --name dev-infra-deployment \
+            --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
+
+          "testClusterName=$(az deployment subscription show \
+            --name test-infra-deployment \
+            --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
+
+          "prodClusterName=$(az deployment subscription show \
+            --name prod-infra-deployment \
+            --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
+  dev-workload-deployment:
+    name: 'Apply Dev Workload'
+    runs-on: ubuntu-latest
+    needs: lint-deployment-files
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: azure/arm-deploy@v1
+        name: 'Deploy Dev Workload'
+        with: 
+          scope: resourceGroup
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/workload.bicep
+          deploymentName: dev-workload-deployment
+          parameters: 
+            resourceGroupName=${{ needs.get-deployment.outputs.devResourceGroupName }}
+            clusterName${{ needs.get-deployment.outputs.devClusterName }}
+            environment=dev
+  test-workload-deployment:
+    name: 'Apply Test Workload'
+    runs-on: ubuntu-latest
+    needs: [lint-deployment-files, dev-workload-deployment]
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: azure/arm-deploy@v1
+        name: 'Deploy Test Workload'
+        with: 
+          scope: resourceGroup
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/workload.bicep
+          deploymentName: test-workload-deployment
+          parameters: 
+            resourceGroupName=${{ needs.get-deployment.outputs.devResourceGroupName }}
+            clusterName${{ needs.get-deployment.outputs.devClusterName }}
+            environment=test 
+  prod-workload-deployment:
+    name: 'Apply Prod Workload'
+    runs-on: ubuntu-latest
+    needs: [lint-deployment-files, test-workload-deployment]
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - uses: azure/arm-deploy@v1
+        name: 'Deploy Prod Workload'
+        with: 
+          scope: resourceGroup
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/workload.bicep
+          deploymentName: prod-workload-deployment
+          parameters: 
+            resourceGroupName=${{ needs.get-deployment.outputs.prodResourceGroupName }}
+            clusterName${{ needs.get-deployment.outputs.prodClusterName }}
+            environment=prod
