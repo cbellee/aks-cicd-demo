@@ -98,7 +98,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         name: 'Deploy Dev Workload'
         with: 
-          scope: resourceGroup
+          scope: resourcegroup
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
@@ -123,7 +123,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         name: 'Deploy Test Workload'
         with: 
-          scope: resourceGroup
+          scope: resourcegroup
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
@@ -148,7 +148,7 @@ jobs:
       - uses: azure/arm-deploy@v1
         name: 'Deploy Prod Workload'
         with: 
-          scope: resourceGroup
+          scope: resourcegroup
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
