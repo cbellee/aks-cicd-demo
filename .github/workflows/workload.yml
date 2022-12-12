@@ -26,15 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint-deployment-files
     outputs:
-      devResourceGroupName: ${{ steps.get-deployment.outputs.devResourceGroupName }}
-      testResourceGroupName: ${{ steps.get-deployment.outputs.testResourceGroupName }}
-      prodResourceGroupName: ${{ steps.get-deployment.outputs.prodResourceGroupName }}
-      devClusterName: ${{ steps.get-deployment.outputs.devClusterName }}
-      testClusterName: ${{ steps.get-deployment.outputs.testClusterName }}
-      prodClusterName: ${{ steps.get-deployment.outputs.prodClusterName }}
-      devAcrName: ${{ steps.get-deployment.outputs.devAcrName }}
-      testAcrName: ${{ steps.get-deployment.outputs.testAcrName }}
-      prodAcrName: ${{ steps.get-deployment.outputs.prodAcrName }}
+      devResourceGroupName: ${{ steps.deployment-output.outputs.devResourceGroupName }}
+      testResourceGroupName: ${{ steps.deployment-output.outputs.testResourceGroupName }}
+      prodResourceGroupName: ${{ steps.deployment-output.outputs.prodResourceGroupName }}
+      devClusterName: ${{ steps.deployment-output.outputs.devClusterName }}
+      testClusterName: ${{ steps.deployment-output.outputs.testClusterName }}
+      prodClusterName: ${{ steps.deployment-output.outputs.prodClusterName }}
+      devAcrName: ${{ steps.deployment-output.outputs.devAcrName }}
+      testAcrName: ${{ steps.deployment-output.outputs.testAcrName }}
+      prodAcrName: ${{ steps.deployment-output.outputs.prodAcrName }}
     steps:
       - name: 'Check out repository'
         uses: actions/checkout@v3
@@ -45,7 +45,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: 'Get Deployment Output'
-        id: get-deployment-output
+        id: deployment-output
         run: |
           echo "devResourceGroupName=$(az deployment sub show \
             --name dev-infra-deployment \
@@ -96,13 +96,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - uses: azure/arm-deploy@v1
-        name: 'Deploy Dev Workload'
+        name: 'Apply Dev Workload'
         with: 
           scope: resourcegroup
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
           resourceGroupName: ${{ needs.get-deployment.outputs.devResourceGroupName }}
+          deploymentMode: Incremental
           deploymentName: dev-workload-deployment
           parameters: 
             clusterName${{ needs.get-deployment.outputs.devClusterName }}
@@ -128,6 +129,7 @@ jobs:
           region: ${{ env.location }}
           template: ./iac/workload.bicep
           resourceGroupName: ${{ needs.get-deployment.outputs.testResourceGroupName }}
+          deploymentMode: Incremental
           deploymentName: test-workload-deployment
           parameters: 
             clusterName${{ needs.get-deployment.outputs.devClusterName }}
@@ -153,6 +155,7 @@ jobs:
           region: ${{ env.location }}
           template: ./iac/workload.bicep
           resourceGroupName: ${{ needs.get-deployment.outputs.prodResourceGroupName }}
+          deploymentMode: Incremental
           deploymentName: prod-workload-deployment
           parameters: 
             clusterName${{ needs.get-deployment.outputs.prodClusterName }}
