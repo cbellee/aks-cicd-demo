@@ -41,7 +41,6 @@ jobs:
           subscription-id: ${{ secrets.subscription-id }}
       - uses: azure/arm-deploy@v1
         name: 'Validate Dev Infrastructure'
-        id: deploy-dev-infra
         with: 
           scope: subscription
           subscriptionId: ${{ env.subscriptionId }}
@@ -55,7 +54,6 @@ jobs:
           deploymentName: validate-dev-infra-deployment
       - uses: azure/arm-deploy@v1
         name: 'Deploy Dev Infrastructure'
-        id: deploy-dev-infra
         with: 
           scope: subscription
           subscriptionId: ${{ env.subscriptionId }}
