@@ -106,7 +106,7 @@ jobs:
           deploymentMode: Incremental
           deploymentName: dev-workload-deployment
           parameters: 
-            clusterName${{ needs.get-deployment.outputs.devClusterName }}
+            clusterName=${{ needs.get-deployment.outputs.devClusterName }}
             environment=dev
   test-workload-deployment:
     name: 'Apply Test Workload'
@@ -132,7 +132,7 @@ jobs:
           deploymentMode: Incremental
           deploymentName: test-workload-deployment
           parameters: 
-            clusterName${{ needs.get-deployment.outputs.devClusterName }}
+            clusterName=${{ needs.get-deployment.outputs.devClusterName }}
             environment=test 
   prod-workload-deployment:
     name: 'Apply Prod Workload'
@@ -158,5 +158,5 @@ jobs:
           deploymentMode: Incremental
           deploymentName: prod-workload-deployment
           parameters: 
-            clusterName${{ needs.get-deployment.outputs.prodClusterName }}
+            clusterName=${{ needs.get-deployment.outputs.prodClusterName }}
             environment=prod
