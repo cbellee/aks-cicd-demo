@@ -26,15 +26,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint-deployment-files
     outputs:
-      devResourceGroupName: ${{ steps.get-deployment-output.devResourceGroupName }}
-      testResourceGroupName: ${{ steps.get-deployment-output.testResourceGroupName }}
-      prodResourceGroupName: ${{ steps.get-deployment-output.prodResourceGroupName }}
-      devClusterName: ${{ steps.get-deployment-output.devClusterName }}
-      testClusterName: ${{ steps.get-deployment-output.testClusterName }}
-      prodClusterName: ${{ steps.get-deployment-output.prodClusterName }}
-      devAcrName: ${{ steps.get-deployment-output.devAcrName }}
-      testAcrName: ${{ steps.get-deployment-output.testAcrName }}
-      prodAcrName: ${{ steps.get-deployment-output.prodAcrName }}
+      devResourceGroupName: ${{ steps.get-deployment.outputs.devResourceGroupName }}
+      testResourceGroupName: ${{ steps.get-deployment.outputs.testResourceGroupName }}
+      prodResourceGroupName: ${{ steps.get-deployment.outputs.prodResourceGroupName }}
+      devClusterName: ${{ steps.get-deployment.outputs.devClusterName }}
+      testClusterName: ${{ steps.get-deployment.outputs.testClusterName }}
+      prodClusterName: ${{ steps.get-deployment.outputs.prodClusterName }}
+      devAcrName: ${{ steps.get-deployment.outputs.devAcrName }}
+      testAcrName: ${{ steps.get-deployment.outputs.testAcrName }}
+      prodAcrName: ${{ steps.get-deployment.outputs.prodAcrName }}
     steps:
       - name: 'Check out repository'
         uses: actions/checkout@v3
