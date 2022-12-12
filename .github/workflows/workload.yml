@@ -63,15 +63,15 @@ jobs:
 
           echo "devClusterName=$(az deployment sub show \
             --name dev-infra-deployment \
-            --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
+            --query properties.outputs.aksClusterName.value)" >> $GITHUB_OUTPUT
 
           echo "testClusterName=$(az deployment sub show \
             --name test-infra-deployment \
-            --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
+            --query properties.outputs.aksClusterName.value)" >> $GITHUB_OUTPUT
 
           echo "prodClusterName=$(az deployment sub show \
             --name prod-infra-deployment \
-            --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
+            --query properties.outputs.aksClusterName.value)" >> $GITHUB_OUTPUT
           
           echo "devAcrName=$(az deployment sub show \
             --name dev-infra-deployment \
