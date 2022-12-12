@@ -36,27 +36,27 @@ jobs:
       - name: 'Get Deployment Output'
         id: get-deployment-output
         run: |
-          "devResourceGroupName=$(az deployment subscription show \
+          "devResourceGroupName=$(az deployment sub show \
             --name dev-infra-deployment \
             --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
 
-          "testResourceGroupName=$(az deployment subscription show \
+          "testResourceGroupName=$(az deployment sub show \
             --name test-infra-deployment \
             --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
 
-          "prodResourceGroupName=$(az deployment subscription show \
+          "prodResourceGroupName=$(az deployment sub show \
             --name prod-infra-deployment \
             --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
 
-          "devClusterName=$(az deployment subscription show \
+          "devClusterName=$(az deployment sub show \
             --name dev-infra-deployment \
             --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
 
-          "testClusterName=$(az deployment subscription show \
+          "testClusterName=$(az deployment sub show \
             --name test-infra-deployment \
             --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
 
-          "prodClusterName=$(az deployment subscription show \
+          "prodClusterName=$(az deployment sub show \
             --name prod-infra-deployment \
             --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
   dev-workload-deployment:
