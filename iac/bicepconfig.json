@@ -5,7 +5,7 @@
       "verbose": true,
       "rules": {
         "adminusername-should-not-be-literal": {
-          "level": "error"
+          "level": "warning"
         },
         "decompiler-cleanup": {
           "level": "warning"
@@ -44,46 +44,46 @@
           "level": "warning"
         },
         "max-outputs": {
-          "level": "error"
+          "level": "warning"
         },
         "max-params": {
-          "level": "error"
+          "level": "warning"
         },
         "max-resources": {
-          "level": "error"
+          "level": "warning"
         },
         "max-variables": {
-          "level": "error"
+          "level": "warning"
         },
         "no-hardcoded-env-urls": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unnecessary-dependson": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unused-params": {
-          "level": "error"
+          "level": "warning"
         },
         "no-unused-vars": {
-          "level": "error"
+          "level": "warning"
         },
         "outputs-should-not-contain-secrets": {
-          "level": "error"
+          "level": "warning"
         },
         "prefer-interpolation": {
-          "level": "error"
+          "level": "warning"
         },
         "secure-parameter-default": {
-          "level": "error"
+          "level": "warning"
         },
         "simplify-interpolation": {
-          "level": "error"
+          "level": "warning"
         },
         "protect-commandtoexecute-secrets": {
-          "level": "error"
+          "level": "warning"
         },
         "use-stable-vm-image": {
-          "level": "error"
+          "level": "warning"
         }
       }
     }
