@@ -122,8 +122,8 @@ jobs:
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/infrastructure.bicep
-          parameters: .
-            /iac/parameters/prod.parameters.json
+          parameters:
+            ./iac/parameters/prod.parameters.json
             location=${{ env.location }}
             aksVersion=${{ env.aksVersion }}
           deploymentMode: Validate
