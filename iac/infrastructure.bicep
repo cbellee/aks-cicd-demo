@@ -90,8 +90,8 @@ module aks './modules/aks.bicep' = {
     tags: tags
     addOns: {}
     enablePrivateCluster: false
-    aksSystemSubnetId: vNetsModule[0].outputs.subnetRefs[0].id
-    aksUserSubnetId: vNetsModule[0].outputs.subnetRefs[1].id
+    aksSystemSubnetId: vNetsModule[1].outputs.subnetRefs[0].id
+    aksUserSubnetId: vNetsModule[1].outputs.subnetRefs[1].id
     logAnalyticsWorkspaceId: azMonitorModule.outputs.workspaceId
     adminGroupObjectID: aksAdminGroupObjectId
   }

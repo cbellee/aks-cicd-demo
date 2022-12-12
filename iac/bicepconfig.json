@@ -1,55 +1,91 @@
 {
-    "analyzers": {
-      "core": {
-        "enabled": true,
-        "verbose": true,
-        "rules": {
-          "adminusername-should-not-be-literal": {
-            "level": "error"
-          },
-          "max-outputs": {
-            "level": "error"
-          },
-          "max-params": {
-            "level": "error"
-          },
-          "max-resources": {
-            "level": "error"
-          },
-          "max-variables": {
-            "level": "error"
-          },
-          "no-hardcoded-env-urls": {
-            "level": "error"
-          },
-          "no-unnecessary-dependson": {
-            "level": "error"
-          },
-          "no-unused-params": {
-            "level": "error"
-          },
-          "no-unused-vars": {
-            "level": "error"
-          },
-          "outputs-should-not-contain-secrets": {
-            "level": "error"
-          },
-          "prefer-interpolation": {
-            "level": "error"
-          },
-          "secure-parameter-default": {
-            "level": "error"
-          },
-          "simplify-interpolation": {
-            "level": "error"
-          },
-          "protect-commandtoexecute-secrets": {
-            "level": "error"
-          },
-          "use-stable-vm-image": {
-            "level": "error"
-          }
+  "analyzers": {
+    "core": {
+      "enabled": true,
+      "verbose": true,
+      "rules": {
+        "adminusername-should-not-be-literal": {
+          "level": "error"
+        },
+        "decompiler-cleanup": {
+          "level": "warning"
+        },
+        "no-hardcoded-location": {
+          "level": "warning"
+        },
+        "no-unused-existing-resources": {
+          "level": "warning"
+        },
+        "no-loc-expr-outside-params": {
+          "level": "warning"
+        },
+        "secure-params-in-nested-deploy": {
+          "level": "warning"
+        },
+        "secure-secrets-in-params": {
+          "level": "warning"
+        },
+        "use-recent-api-versions": {
+          "level": "warning"
+        },
+        "use-resource-id-functions": {
+          "level": "warning"
+        },
+        "prefer-unquoted-property-names": {
+          "level": "warning"
+        },
+        "use-stable-resource-identifiers": {
+          "level": "warning"
+        },
+        "artifacts-parameters": {
+          "level": "warning"
+        },
+        "explicit-values-for-loc-params": {
+          "level": "warning"
+        },
+        "max-outputs": {
+          "level": "error"
+        },
+        "max-params": {
+          "level": "error"
+        },
+        "max-resources": {
+          "level": "error"
+        },
+        "max-variables": {
+          "level": "error"
+        },
+        "no-hardcoded-env-urls": {
+          "level": "error"
+        },
+        "no-unnecessary-dependson": {
+          "level": "error"
+        },
+        "no-unused-params": {
+          "level": "error"
+        },
+        "no-unused-vars": {
+          "level": "error"
+        },
+        "outputs-should-not-contain-secrets": {
+          "level": "error"
+        },
+        "prefer-interpolation": {
+          "level": "error"
+        },
+        "secure-parameter-default": {
+          "level": "error"
+        },
+        "simplify-interpolation": {
+          "level": "error"
+        },
+        "protect-commandtoexecute-secrets": {
+          "level": "error"
+        },
+        "use-stable-vm-image": {
+          "level": "error"
         }
       }
     }
   }
+}
