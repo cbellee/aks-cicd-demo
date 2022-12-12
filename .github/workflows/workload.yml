@@ -47,39 +47,39 @@ jobs:
       - name: 'Get Deployment Output'
         id: get-deployment-output
         run: |
-          "devResourceGroupName=$(az deployment sub show \
+          echo "devResourceGroupName=$(az deployment sub show \
             --name dev-infra-deployment \
             --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
 
-          "testResourceGroupName=$(az deployment sub show \
+          echo "testResourceGroupName=$(az deployment sub show \
             --name test-infra-deployment \
             --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
 
-          "prodResourceGroupName=$(az deployment sub show \
+          echo "prodResourceGroupName=$(az deployment sub show \
             --name prod-infra-deployment \
             --query properties.outputs.workloadResourceGroupName.value)" >> $GITHUB_OUTPUT
 
-          "devClusterName=$(az deployment sub show \
+          echo "devClusterName=$(az deployment sub show \
             --name dev-infra-deployment \
             --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
 
-          "testClusterName=$(az deployment sub show \
+          echo "testClusterName=$(az deployment sub show \
             --name test-infra-deployment \
             --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
 
-          "prodClusterName=$(az deployment sub show \
+          echo "prodClusterName=$(az deployment sub show \
             --name prod-infra-deployment \
             --query properties.outputs.clusterName.value)" >> $GITHUB_OUTPUT
           
-          "devAcrName=$(az deployment sub show \
+          echo "devAcrName=$(az deployment sub show \
             --name dev-infra-deployment \
             --query properties.outputs.acrName.value)" >> $GITHUB_OUTPUT
 
-          "testAcrName=$(az deployment sub show \
+          echo "testAcrName=$(az deployment sub show \
             --name test-infra-deployment \
             --query properties.outputs.acrName.value)" >> $GITHUB_OUTPUT
 
-          "prodAcrName=$(az deployment sub show \
+          echo "prodAcrName=$(az deployment sub show \
             --name prod-infra-deployment \
             --query properties.outputs.acrName.value)" >> $GITHUB_OUTPUT
   dev-workload-deployment:
