@@ -30,6 +30,7 @@ jobs:
   dev-deployment:
     name: 'Deploy Dev Infrastructure'
     runs-on: ubuntu-latest
+    needs: lint-deployment-files
     steps:
       - name: 'Check out repository'
         uses: actions/checkout@v3
@@ -68,6 +69,7 @@ jobs:
   test-deployment:
     name: 'Deploy Test Infrastructure'
     runs-on: ubuntu-latest
+    needs: [lint-deployment-files, dev-deployment]
     steps:
       - name: 'Check out repository'
         uses: actions/checkout@v3
@@ -104,6 +106,7 @@ jobs:
   prod-deployment:
     name: 'Deploy Prod Infrastructure'
     runs-on: ubuntu-latest
+    needs: [lint-deployment-files, test-deployment]
     steps:
       - name: 'Check out repository'
         uses: actions/checkout@v3
