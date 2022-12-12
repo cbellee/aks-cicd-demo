@@ -12,7 +12,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-10-02-preview' exi
   name: aksClusterName
 }
 
-resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01' = {
+resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2022-07-01' = {
   name: 'flux'
   scope: aks
   properties: {
@@ -21,7 +21,7 @@ resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01'
   }
 }
 
-resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-11-01' = {
+resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-07-01' = {
   name: 'cluster-config'
   scope: aks
   dependsOn: [
