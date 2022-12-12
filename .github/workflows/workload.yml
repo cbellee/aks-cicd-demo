@@ -3,8 +3,8 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: ["Infrastructure Deployment"]
-    type:
-      - complete
+    types:
+      - completed
 permissions:
       id-token: write
       contents: read
