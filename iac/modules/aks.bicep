@@ -65,7 +65,7 @@ param enablePrivateCluster bool = false
 var suffix = uniqueString(resourceGroup().id)
 var aksClusterName = 'aks-${suffix}'
 
-resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-06-02-preview' = {
+resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-10-02-preview' = {
   name: aksClusterName
   location: location
   identity: {
@@ -134,7 +134,7 @@ resource aksCluster 'Microsoft.ContainerService/managedClusters@2022-06-02-previ
   }
 }
 
-resource aksDiagnostics 'Microsoft.Insights/diagnosticSettings@2017-05-01-preview' = {
+resource aksDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: aksCluster
   name: 'aksDiagnosticSettings'
   properties: {

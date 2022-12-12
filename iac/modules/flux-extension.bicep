@@ -8,7 +8,7 @@ param gitRepoUrl string
 ])
 param environmentName string
 
-resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' existing = {
+resource aks 'Microsoft.ContainerService/managedClusters@2022-10-02-preview' existing = {
   name: aksClusterName
 }
 
@@ -21,7 +21,7 @@ resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2021-09-01'
   }
 }
 
-resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2021-11-01-preview' = {
+resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-11-01' = {
   name: 'cluster-config'
   scope: aks
   dependsOn: [
