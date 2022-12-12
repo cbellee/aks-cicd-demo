@@ -8,11 +8,11 @@ param gitRepoUrl string
 ])
 param environmentName string
 
-resource aks 'Microsoft.ContainerService/managedClusters@2022-08-03-preview' existing = {
+resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' existing = {
   name: aksClusterName
 }
 
-resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01' = {
+resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2021-09-01' = {
   name: 'flux'
   scope: aks
   properties: {
@@ -21,7 +21,7 @@ resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2022-03-01'
   }
 }
 
-resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-07-01' = {
+resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2021-11-01-preview' = {
   name: 'cluster-config'
   scope: aks
   dependsOn: [
@@ -39,19 +39,23 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-0
       repositoryRef: {
         branch: 'main'
       }
+
     }
     kustomizations: {
-      infra: {
-        path: './workload/infrastructure'
+/*      infra: {
+        path: './infrastructure'
         dependsOn: []
         timeoutInSeconds: 600
         syncIntervalInSeconds: 600
+        validation: 'none'
         prune: true
-      }
+      } */
       apps: {
-        path: './workload/apps/${environmentName}'
+        path: './apps/${environmentName}'
         dependsOn: [
-          'infra'
+          /*{
+            kustomizationName: 'infra'
+          }*/
         ]
         timeoutInSeconds: 600
         syncIntervalInSeconds: 600
@@ -61,3 +65,4 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-0
     }
   }
 }
+

@@ -1,0 +1,141 @@
+name: 'Infrastructure Workflow'
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+      id-token: write
+      contents: read
+env:
+  location: 'australiaeast'
+  subscriptionId: 'b2375b5f-8dab-4436-b87c-32bc7fdce5d0'
+  aksAdminGroupObjectId: 'f6a900e2-df11-43e7-ba3e-22be99d3cede'
+  aksVersion: '1.23.12'
+jobs:
+  lint-deployment-files:
+    name: 'Lint Bicep deployment files'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Lint Bicep Files'
+        run: |
+          bicep build ./iac/modules/acr.bicep
+          bicep build ./iac/modules/aks.bicep
+          bicep build ./iac/modules/azmon.bicep
+          bicep build ./iac/modules/flux-extension.bicep
+          bicep build ./iac/modules/peering.bicep
+          bicep build ./iac/modules/vnets.bicep
+          bicep build ./iac/infrastructure.bicep
+  dev-deployment:
+    name: 'Deploy Dev Infrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.client-id }}
+          tenant-id: ${{ secrets.tenant-id }}
+          subscription-id: ${{ secrets.subscription-id }}
+      - uses: azure/arm-deploy@v1
+        name: 'Validate Dev Infrastructure'
+        id: deploy-dev-infra
+        with: 
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/infrastructure.bicep
+          parameters: 
+            ./iac/parameters/dev.parameters.json 
+            location=${{ env.location }} 
+            aksVersion=${{ env.aksVersion }}
+          deploymentMode: Validate
+          deploymentName: validate-dev-infra-deployment
+      - uses: azure/arm-deploy@v1
+        name: 'Deploy Dev Infrastructure'
+        id: deploy-dev-infra
+        with: 
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/infrastructure.bicep
+          parameters: 
+            ./iac/parameters/dev.parameters.json
+            location=${{ env.location }}
+            aksVersion=${{ env.aksVersion }}
+          deploymentMode: Incremental
+          deploymentName: dev-infra-deployment
+  test-deployment:
+    name: 'Deploy Test Infrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.client-id }}
+          tenant-id: ${{ secrets.tenant-id }}
+          subscription-id: ${{ secrets.subscription-id }}
+      - uses: azure/arm-deploy@v1
+        with: 
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/infrastructure.bicep
+          parameters: 
+            ./iac/parameters/test.parameters.json
+            location=${{ env.location }}
+            aksVersion=${{ env.aksVersion }}
+          deploymentMode: Validate
+          deploymentName: validate-test-infra-deployment
+      - uses: azure/arm-deploy@v1
+        with: 
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/infrastructure.bicep
+          parameters: 
+            ./iac/parameters/test.parameters.json
+            location=${{ env.location }}
+            aksVersion=${{ env.aksVersion }}
+          deploymentMode: Incremental
+          deploymentName: test-infra-deployment
+  prod-deployment:
+    name: 'Deploy Prod Infrastructure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check out repository'
+        uses: actions/checkout@v3
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.client-id }}
+          tenant-id: ${{ secrets.tenant-id }}
+          subscription-id: ${{ secrets.subscription-id }}
+      - uses: azure/arm-deploy@v1
+        with: 
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/infrastructure.bicep
+          parameters: .
+            /iac/parameters/prod.parameters.json
+            location=${{ env.location }}
+            aksVersion=${{ env.aksVersion }}
+          deploymentMode: Validate
+          deploymentName: validate-prod-infra-deployment
+      - uses: azure/arm-deploy@v1
+        with: 
+          scope: subscription
+          subscriptionId: ${{ env.subscriptionId }}
+          region: ${{ env.location }}
+          template: ./iac/infrastructure.bicep
+          parameters: 
+            ./iac/parameters/prod.parameters.json
+            location=${{ env.location }}
+            aksVersion=${{ env.aksVersion }}
+          deploymentMode: incremental
+          deploymentName: prod-infra-deployment

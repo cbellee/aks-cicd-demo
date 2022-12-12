@@ -19,7 +19,7 @@ var subnets = [for i in range(0, length(vNet.subnets)): {
   id: resourceId('Microsoft.Network/virtualNetworks/subnets/', '${vNet.name}-${suffix}', vNet.subnets[i].name)
 }]
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2022-05-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2018-11-01' = {
   name: '${vNet.name}-${suffix}'
   location: location
   tags: tags

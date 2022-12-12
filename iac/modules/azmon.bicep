@@ -3,7 +3,7 @@ param location string
 var suffix = uniqueString(resourceGroup().id)
 var workspaceName = 'ws-${suffix}'
 
-resource azureMonitorWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+resource azureMonitorWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
   properties: {

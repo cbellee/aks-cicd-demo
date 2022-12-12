@@ -4,7 +4,7 @@ param isGatewayDeployed bool = false
 
 var suffix = uniqueString(resourceGroup().id)
 
-resource hub_peering_to_spoke 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2022-05-01' = [for i in range(0, (length(vNets) - 1)): {
+resource hub_peering_to_spoke 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2018-11-01' = [for i in range(0, (length(vNets) - 1)): {
   name: '${vNets[0].name}-${suffix}/peering-to-${vNets[(i + 1)].name}-${suffix}'
   properties: {
     allowVirtualNetworkAccess: true
@@ -17,7 +17,7 @@ resource hub_peering_to_spoke 'Microsoft.Network/virtualNetworks/virtualNetworkP
   }
 }]
 
-resource spoke_peering_to_hub 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2022-05-01' = [for i in range(0, (length(vNets) - 1)): {
+resource spoke_peering_to_hub 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2018-11-01' = [for i in range(0, (length(vNets) - 1)): {
   name: '${vNets[(i + 1)].name}-${suffix}/peering-to-${vNets[0].name}-${suffix}'
   properties: {
     allowVirtualNetworkAccess: true
