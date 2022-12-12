@@ -12,7 +12,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-10-02-preview' exi
   name: aksClusterName
 }
 
-resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2021-09-01' = {
+resource fluxExtension 'Microsoft.KubernetesConfiguration/extensions@2022-11-01' = {
   name: 'flux'
   scope: aks
   properties: {
@@ -42,21 +42,8 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-1
 
     }
     kustomizations: {
-/*      infra: {
-        path: './infrastructure'
-        dependsOn: []
-        timeoutInSeconds: 600
-        syncIntervalInSeconds: 600
-        validation: 'none'
-        prune: true
-      } */
       apps: {
         path: './apps/${environmentName}'
-        dependsOn: [
-          /*{
-            kustomizationName: 'infra'
-          }*/
-        ]
         timeoutInSeconds: 600
         syncIntervalInSeconds: 600
         retryIntervalInSeconds: 600
