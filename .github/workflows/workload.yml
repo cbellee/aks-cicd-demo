@@ -102,7 +102,7 @@ jobs:
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
-          resourceGroupName: needs.get-deployment.outputs.devResourceGroupName
+          resourceGroupName: ${{ needs.get-deployment.outputs.devResourceGroupName }}
           deploymentName: dev-workload-deployment
           parameters: 
             clusterName${{ needs.get-deployment.outputs.devClusterName }}
@@ -127,7 +127,7 @@ jobs:
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
-          resourceGroupName: needs.get-deployment.outputs.testResourceGroupName
+          resourceGroupName: ${{ needs.get-deployment.outputs.testResourceGroupName }}
           deploymentName: test-workload-deployment
           parameters: 
             clusterName${{ needs.get-deployment.outputs.devClusterName }}
@@ -152,7 +152,7 @@ jobs:
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/workload.bicep
-          resourceGroupName: needs.get-deployment.outputs.prodResourceGroupName
+          resourceGroupName: ${{ needs.get-deployment.outputs.prodResourceGroupName }}
           deploymentName: prod-workload-deployment
           parameters: 
             clusterName${{ needs.get-deployment.outputs.prodClusterName }}
