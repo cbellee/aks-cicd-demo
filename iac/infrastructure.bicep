@@ -71,7 +71,7 @@ module peeringModule './modules/peering.bicep' = {
 
 // Azure Container Registry
 module acr './modules/acr.bicep' = {
-  scope: resourceGroup(workloadResourceGroupName)
+  scope: resourceGroup(workloadResourceGroup.name)
   name: 'module-acr'
   params: {
     location: location
@@ -99,7 +99,7 @@ module aks './modules/aks.bicep' = {
 
 // Assign 'AcrPull' role to AKS cluster kubelet identity
 resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(workloadResourceGroupName, aks.name, 'acrPullRoleAssignment')
+  name: guid(workloadResourceGroup.name, aks.name, 'acrPullRoleAssignment')
   properties: {
     principalId: aks.outputs.aksKubeletIdentityObjectId
     principalType: 'ServicePrincipal'
@@ -110,7 +110,7 @@ resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-
 
 // Assign 'Network Contributor' role to AKS cluster system managed identity
 resource aksNetworkContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(workloadResourceGroupName, aks.name, 'aksNetworkContributorRoleAssignment')
+  name: guid(workloadResourceGroup.name, aks.name, 'aksNetworkContributorRoleAssignment')
   properties: {
     principalId: aks.outputs.aksClusterManagedIdentity
     principalType: 'ServicePrincipal'
