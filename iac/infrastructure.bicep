@@ -17,21 +17,21 @@ param workloadResourceGroupName string = 'demo-workload-${environment}-rg'
 targetScope = 'subscription'
 
 var acrPullRoleDefinitionName = '7f951dda-4ed3-4680-a7ca-43fe172d538d'
-var acrPullRoleId = '${subscription().id}/providers/Microsoft.Authorization/roleDefinitions/${acrPullRoleDefinitionName}'
+var acrPullRoleId = resourceId('Microsoft.Authorization/roleDefinitions', acrPullRoleDefinitionName)
 var networkContributorRoleDefinitionName = '4d97b98b-1d4f-4787-a291-c67834d212e7'
-var networkContributorRoleId = '${subscription().id}/providers/Microsoft.Authorization/roleDefinitions/${networkContributorRoleDefinitionName}'
+var networkContributorRoleId = resourceId('Microsoft.Authorization/roleDefinitions', networkContributorRoleDefinitionName)
 
 resource networkResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
   name: networkResourceGroupName
 }
 
-resource monitorResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+resource monitorResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
   name: monitorResourceGroupName
 }
 
-resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+resource workloadResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
   name: workloadResourceGroupName
 }
@@ -98,7 +98,7 @@ module aks './modules/aks.bicep' = {
 }
 
 // Assign 'AcrPull' role to AKS cluster kubelet identity
-resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
+resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(workloadResourceGroupName, aks.name, 'acrPullRoleAssignment')
   properties: {
     principalId: aks.outputs.aksKubeletIdentityObjectId
@@ -109,7 +109,7 @@ resource acrPullRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-
 }
 
 // Assign 'Network Contributor' role to AKS cluster system managed identity
-resource aksNetworkContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = {
+resource aksNetworkContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(workloadResourceGroupName, aks.name, 'aksNetworkContributorRoleAssignment')
   properties: {
     principalId: aks.outputs.aksClusterManagedIdentity

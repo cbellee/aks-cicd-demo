@@ -66,7 +66,6 @@ jobs:
             ./iac/parameters/dev.parameters.json
             location=${{ env.location }}
             aksVersion=${{ env.aksVersion }}
-          deploymentMode: Incremental
           deploymentName: dev-infra-deployment
   test-deployment:
     name: 'Deploy Test Infrastructure'
@@ -103,7 +102,6 @@ jobs:
             ./iac/parameters/test.parameters.json
             location=${{ env.location }}
             aksVersion=${{ env.aksVersion }}
-          deploymentMode: Incremental
           deploymentName: test-infra-deployment
   prod-deployment:
     name: 'Deploy Prod Infrastructure'
@@ -140,5 +138,4 @@ jobs:
             ./iac/parameters/prod.parameters.json
             location=${{ env.location }}
             aksVersion=${{ env.aksVersion }}
-          deploymentMode: incremental
           deploymentName: prod-infra-deployment
