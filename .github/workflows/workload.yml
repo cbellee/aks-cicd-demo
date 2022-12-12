@@ -1,12 +1,6 @@
 name: 'Workload Deployment'
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
-
-  # set dependency on infra workflow
   workflow_run:
     workflows: ["Infrastructure Deployment"]
     type:
