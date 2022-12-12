@@ -22,6 +22,7 @@ jobs:
       - name: 'Lint Bicep Files'
         run: |
           bicep build ./iac/modules/flux-extension.bicep
+          bicep build ./iac/workload.bicep
   get-deployment:
     name: 'Get Deployment Output'
     runs-on: ubuntu-latest

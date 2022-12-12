@@ -16,4 +16,3 @@ module fluxExtension './modules/flux-extension.bicep' = {
 }
 
 output clusterName string = existingCluster.name
-output clusterFqdn string = existingCluster.properties.fqdn
