@@ -11,6 +11,7 @@ permissions:
 env:
   location: 'australiaeast'
   subscriptionId: 'b2375b5f-8dab-4436-b87c-32bc7fdce5d0'
+  gitRepoUrl: 'cbellee/aks-cicd-demo'
 jobs:
   lint-deployment-files:
     name: 'Lint Bicep deployment files'
@@ -108,6 +109,7 @@ jobs:
           parameters: 
             clusterName=${{ needs.get-deployment.outputs.devClusterName }}
             environment=dev
+            gitRepoUrl=${{ env.gitRepoUrl }}
   test-workload-deployment:
     name: 'Apply Test Workload'
     runs-on: ubuntu-latest
@@ -133,7 +135,8 @@ jobs:
           deploymentName: test-workload-deployment
           parameters: 
             clusterName=${{ needs.get-deployment.outputs.devClusterName }}
-            environment=test 
+            environment=test
+            gitRepoUrl=${{ env.gitRepoUrl }}
   prod-workload-deployment:
     name: 'Apply Prod Workload'
     runs-on: ubuntu-latest
@@ -160,3 +163,4 @@ jobs:
           parameters: 
             clusterName=${{ needs.get-deployment.outputs.prodClusterName }}
             environment=prod
+            gitRepoUrl=${{ env.gitRepoUrl }}
