@@ -39,7 +39,6 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-1
       repositoryRef: {
         branch: 'main'
       }
-
     }
     kustomizations: {
       apps: {
@@ -52,4 +51,3 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-1
     }
   }
 }
-
