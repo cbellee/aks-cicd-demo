@@ -11,7 +11,7 @@ permissions:
 env:
   location: 'australiaeast'
   subscriptionId: 'b2375b5f-8dab-4436-b87c-32bc7fdce5d0'
-  gitRepoUrl: 'cbellee/aks-cicd-demo'
+  gitRepoUrl: 'https://github.com/cbellee/aks-cicd-demo'
 jobs:
   lint-deployment-files:
     name: 'Lint Bicep deployment files'
