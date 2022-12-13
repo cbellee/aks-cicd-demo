@@ -26,7 +26,7 @@ Two GitHub action workflows deploy the solution:
   - Either:
     - Make a change to the repo, commit & push the changes (`git add .`, `git commit`, `git push`)
   - Or:
-    - Run the workflow from the GitHub Actions tab in the GitHub portal.
+    - Run the `.github/workflows/infrastructure.yml` workflow from the GitHub Actions tab in the GitHub portal.
 
 ### Testing
 
