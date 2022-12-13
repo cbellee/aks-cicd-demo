@@ -8,7 +8,7 @@ Two GitHub action workflows deploy the solution:
 - Infrastructure (Networking, Monitoring, AKS clusters, etc.)
   - .github/workflows/infrastructure.yml
 - Workload (Azure Voting app)
-  - .github/workflows/wd.yml
+  - .github/workflows/workload.yml
 
 ### Pre-requisites
 
