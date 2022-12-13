@@ -9,7 +9,7 @@ spec:
       version: "0.1.1"
   values:
     title: 'Production - Azure Voting App'
-    value1: Gerbil
-    value2: Hamster
+    value1: Elephant
+    value2: Zebra
     serviceName: prod-azure-vote-svc
     serviceType: LoadBalancer

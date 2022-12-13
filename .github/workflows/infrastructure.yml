@@ -66,7 +66,7 @@ jobs:
           subscriptionId: ${{ env.subscriptionId }}
           region: ${{ env.location }}
           template: ./iac/infrastructure.bicep
-          parameters: 
+          parameters:
             ./iac/parameters/dev.parameters.json
             location=${{ env.location }}
             aksVersion=${{ env.aksVersion }}
