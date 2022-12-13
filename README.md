@@ -6,9 +6,9 @@ This repo demonstrates how to deploy networking infrastructure, Azure Kubernetes
 Two GitHub action workflows deploy the solution:
 
 - Infrastructure (Networking, Monitoring, AKS clusters, etc.)
-  - .github/workflows/infrastructure.yml
+  - `.github/workflows/infrastructure.yml`
 - Workload (Azure Voting app)
-  - .github/workflows/workload.yml
+  - `.github/workflows/workload.yml`
 
 ### Pre-requisites
 
