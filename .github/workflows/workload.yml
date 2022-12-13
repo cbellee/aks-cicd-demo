@@ -135,7 +135,7 @@ jobs:
           deploymentMode: Incremental
           deploymentName: test-workload-deployment
           parameters: 
-            clusterName=${{ needs.get-deployment.outputs.devClusterName }}
+            clusterName=${{ needs.get-deployment.outputs.testClusterName }}
             environment=test
             gitRepoUrl=${{ env.gitRepoUrl }}
   prod-workload-deployment:
