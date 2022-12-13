@@ -41,12 +41,19 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-0
       }
     }
     kustomizations: {
+      infra: {
+        path: './infrastructure'
+        syncIntervalInSeconds: 120
+      }
       apps: {
         path: './apps/${environmentName}'
         timeoutInSeconds: 60
         syncIntervalInSeconds: 60
         retryIntervalInSeconds: 60
         prune: true
+        dependsOn: [
+          'infra'
+        ]
       }
     }
   }
