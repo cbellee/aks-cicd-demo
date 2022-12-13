@@ -34,8 +34,8 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-0
     suspend: false
     gitRepository: {
       url: gitRepoUrl
-      timeoutInSeconds: 600
-      syncIntervalInSeconds: 600
+      timeoutInSeconds: 60
+      syncIntervalInSeconds: 60
       repositoryRef: {
         branch: 'main'
       }
@@ -43,9 +43,9 @@ resource fluxConfig 'Microsoft.KubernetesConfiguration/fluxConfigurations@2022-0
     kustomizations: {
       apps: {
         path: './apps/${environmentName}'
-        timeoutInSeconds: 600
-        syncIntervalInSeconds: 600
-        retryIntervalInSeconds: 600
+        timeoutInSeconds: 60
+        syncIntervalInSeconds: 60
+        retryIntervalInSeconds: 60
         prune: true
       }
     }
